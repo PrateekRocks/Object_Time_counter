@@ -1,12 +1,16 @@
-g++ -o video_player opencvHelloworld.cpp `pkg-config --cflags --libs opencv
+Hello 
+I am Prateek 
+
+This assgment is timer running on the ROI for any vehicle that is present inside ROI
 
 
 
-docker run command  :   docker run --device=/dev/video0:/dev/video0 -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY -p 5000:5000 -p 8888:8888 -it objectdetetection
 
-                        docker run  -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/home/Object_Time_counter -e DISPLAY=$DISPLAY -p 5000:5000 -p 8888:8888 -it 76e00a26082d
-                     
- g++ -o VehicleTimer VehicleTimer.cpp -I/usr/local/include/opencv4  -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_dnn -lopencv_videoio -lopencv_imgproc
+
+
+
+docker build -t vehicletimer .
+
 
 
 
@@ -28,3 +32,22 @@ RUN git clone https://github.com/opencv/opencv.git && \
     rm -rf /opencv
 
 RUN export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+RUN mkdir /home/Object_Time_counter
+
+WORKDIR /home/Object_Time_counter
+exit
+RUN g++ -o VehicleTimer VehicleTimer.cpp -I/usr/local/include/opencv4  -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_dnn -lopencv_videoio -lopencv_imgproc
+
+RUN export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+CMD [ "run.sh" ]
+
+
+
+docker run command  :  docker run  -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/home/Object_Time_counter -e DISPLAY=$DISPLAY -p 5000:5000 -p 8888:8888 -it vehicletimer
+                     
+ g++ -o VehicleTimer VehicleTimer.cpp -I/usr/local/include/opencv4  -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_dnn -lopencv_videoio -lopencv_imgproc
+
+
+

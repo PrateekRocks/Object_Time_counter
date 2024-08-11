@@ -136,7 +136,7 @@ void Track(Rect box){
 
     }
     if(  pointPolygonTest(box1,Point(CenterX,CenterY), false) > 0){
-        // TrackInZone({clock(),objectcount});
+        TrackInZone({clock(),objectcount});
        
     }
 
@@ -173,13 +173,13 @@ void checkInZone(Mat frame, pair<int, pair<int, int>> result) {
             putText(frame, formatTime(elapsedSeconds), Point(showtime.x + 65, showtime.y + 25), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 255, 255), 2);
 
         } else {
-            // Add the object to InzoneVehicle with the current time
+          
             InzoneVehicle.push_back({clock(), result.first});
             putText(frame, "00:00", Point(showtime.x + 65, showtime.y + 25), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 255, 255), 2);
         }
     } else {
         if (it != InzoneVehicle.end()) {
-            // The object left the zone, remove it from InzoneVehicle
+           
             InzoneVehicle.erase(it);
         }
     }
@@ -262,14 +262,13 @@ Mat getbox(Mat frame, vector<Mat> &outs ){
                     Scalar(255, 255, 255), FILLED);
         putText(frame, label, Point(box.x, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0), 1);
         circle(frame, Point(result.second.first,result.second.second), 2, Scalar(0, 0, 1), 2);
-        // putText(frame, to_string(result.first), Point(result.second.first,result.second.second-5), FONT_HERSHEY_SIMPLEX, 2, Scalar(0, 0, 1), 3);
+  
 
         checkInZone(frame , result );
-        // bool vehicleInside = false; // Variable to track if the vehicle is inside the zone
-        // checkInZone(frame, result, vehicleInside);
+      
     }
    
-    // polylines(frame, box2, true, Scalar(255, 0, 255), 2); 
+    
 
      
 
@@ -293,6 +292,13 @@ VideoCapture cap("Models/Video.mp4");
 
 timeStart = clock(); 
 
+cv::VideoWriter writer;
+    writer.open("output.mp4", cv::VideoWriter::fourcc('H', '2', '6', '4'), 20, cv::Size(1000, 1200), true);
+    if (!writer.isOpened()) {
+        std::cerr << "Error: Could not open the video writer." << std::endl;
+        return -1;
+    }
+
 if (!cap.isOpened()) {
     cout << "Error: Could not open video." << endl;
     return -1;
@@ -314,16 +320,11 @@ while (cap.isOpened()) {
     Mat annotatedframe = getbox(frame,detection);
 
 
-    // resize(annotatedframe, annotatedframe, cv::Size(1000, 1000));
+    resize(annotatedframe, annotatedframe, cv::Size(1000, 1200));
+        
+    writer.write(annotatedframe);
     imshow("Vehicle Monitoring", annotatedframe);  
-
-    // timeStop = clock();
-    // double elapsedTime = double(timeStop - timeStart) / CLOCKS_PER_SEC;
-
-    // if (elapsedTime >= (lastTimmer + 1)) {
-    //         timmer++;
-    //         // lastTimmer = timmer;
-    // }
+  
 
     int key = cv::waitKey(1); 
     if (key == 'q') {

@@ -19,3 +19,13 @@ RUN git clone https://github.com/opencv/opencv.git && \
     rm -rf /opencv
 
 RUN mkdir /home/Object_Time_counter
+
+WORKDIR /home/Object_Time_counter
+
+COPY . /home/Object_Time_counter
+
+RUN g++ -o VehicleTimer VehicleTimer.cpp -I/usr/local/include/opencv4  -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_dnn -lopencv_videoio -lopencv_imgproc
+
+RUN export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+CMD [ "run.sh" ]
