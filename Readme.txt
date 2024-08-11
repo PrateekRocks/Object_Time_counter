@@ -26,3 +26,5 @@ RUN git clone https://github.com/opencv/opencv.git && \
     make -j"$(nproc)" && \
     make install && \
     rm -rf /opencv
+
+RUN export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
